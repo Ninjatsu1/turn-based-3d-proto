@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cb9dd53a994e5b40bd095dac306cd6f, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
-  Name: Name?
+  Name: Rainy
   Attack: 5
   Health: 20
   Speed: 10

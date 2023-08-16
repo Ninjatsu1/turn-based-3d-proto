@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] 
     private List<CharacterStats> turnOrder = new List<CharacterStats>();
 
+    public static event Action CombatStarts;
     public CombatState combatState;
 
     private void Start()
@@ -39,22 +41,24 @@ public class CombatManager : MonoBehaviour
     private void CombatInitiation()
     {
         combatState = CombatState.Setup;
-        for (int i = 0; i < characters.Count; i++)
-        {
-            if(characters[i].Prefab.gameObject.CompareTag("Player"))
-            {
+        CombatStarts?.Invoke();
 
-            }
-        }
     }
 
-    private void PlayerTurn() 
-    { 
+    private void Combat()
+    {
+            
+    }
+
     
+
+    private void PlayerTurn() 
+    {
+        Debug.Log("Player turn");
     }
 
     private void EnemyTurn()
     {
-
+        Debug.Log("Enemy turn");
     }
 }
