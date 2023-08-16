@@ -7,4 +7,5 @@ public class CharacterStats : ScriptableObject
     public int Attack = 5;
     public int Health = 20;
     public int Speed = 10;
+    public GameObject Prefab;
 }
