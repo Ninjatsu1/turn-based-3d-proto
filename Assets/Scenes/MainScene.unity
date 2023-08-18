@@ -303,6 +303,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnOrder: []
+  currentCharactersTurn: {fileID: 0}
   combatState: 0
 --- !u!1 &639681786
 GameObject:
@@ -1287,7 +1288,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3553282294913310924, guid: 7426c8b0fad00bf4abf65c653b41fec6, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7426c8b0fad00bf4abf65c653b41fec6, type: 3}

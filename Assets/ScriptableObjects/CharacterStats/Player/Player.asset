@@ -17,3 +17,4 @@ MonoBehaviour:
   Health: 20
   Speed: 10
   Prefab: {fileID: 4778559831205309214, guid: b54bcf9ef694fc246b627ab39258f6a1, type: 3}
+  IsPlayerCharacter: 1

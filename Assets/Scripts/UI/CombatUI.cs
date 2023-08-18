@@ -9,7 +9,6 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playerHealth;
     [SerializeField] private GameObject combatButtons;
 
-    private bool textSet = false;
     private GameObject player;
 
     private void OnEnable()

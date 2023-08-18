@@ -6,5 +6,13 @@ using System;
 
 public class PlayerCombatActions : MonoBehaviour
 {
-    
+    private void OnEnable()
+    {
+        
+    }
+
+    private void PlayerCombatAction()
+    {
+
+    }
 }

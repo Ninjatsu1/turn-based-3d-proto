@@ -11,10 +11,10 @@ public class ActionButton : MonoBehaviour
 
     private void Start()
     {
-        attackButton.onClick.AddListener(OnAttackButton);
+        attackButton.onClick.AddListener(OnActionButton);
     }
 
-    private void OnAttackButton()
+    private void OnActionButton()
     {
         Debug.Log("button pressed");
         PlayerAttack?.Invoke();
