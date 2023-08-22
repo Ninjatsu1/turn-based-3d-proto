@@ -304,6 +304,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnOrder: []
   currentCharactersTurn: {fileID: 0}
+  playerTurn: 0
   combatState: 0
 --- !u!1 &639681786
 GameObject:
@@ -1174,6 +1175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackButton: {fileID: 2040845653}
+  combatState: 0
 --- !u!1001 &1373694244460638912
 PrefabInstance:
   m_ObjectHideFlags: 0

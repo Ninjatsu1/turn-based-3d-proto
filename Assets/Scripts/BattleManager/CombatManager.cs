@@ -6,21 +6,26 @@ using UnityEngine;
 
 public class CombatManager : MonoBehaviour
 {
-
     [SerializeField]
     private List<CharacterStats> turnOrder = new List<CharacterStats>();
     [SerializeField]
     private CharacterStats currentCharactersTurn;
+    [SerializeField]
+    private bool playerDidAction = false;
 
-    public static event Action CombatStarts;
+    public static event Action<CombatState> CurrentCombatPhase;
     public CombatState combatState;
+
+    private void OnEnable()
+    {
+        PlayerCombatActions.PlayerDidAction += PlayerDidAction;
+    }
 
     private void Start()
     {
         GetCharacters();
         SetTurnOrder();
         CombatInitiation();
-        //Start combat
     }
 
     //Gets player and enemies
@@ -43,35 +48,43 @@ public class CombatManager : MonoBehaviour
     {
         combatState = CombatState.Setup;
         currentCharactersTurn = turnOrder[0];
-        CombatStarts?.Invoke();
-        Combat();
+
+        CurrentCombatPhase?.Invoke(CombatState.Setup);
+        StartCoroutine(Combat());
     }
 
-    private void Combat()
+    private IEnumerator Combat() //Make it to work in while/update loop
     {
-        if(combatState != CombatState.Win || combatState != CombatState.Lost)
+        for (int i = 0; i < turnOrder.Count; i++)
         {
-            for (int i = 0; i < turnOrder.Count; i++)
+            if (turnOrder[i].IsPlayerCharacter)
             {
-                if (turnOrder[i].IsPlayerCharacter)
-                {
-                    Debug.Log("Player turn");
-                }
-                else
-                {
-                    Debug.Log("Enemy turn");
-                }
+                StartCoroutine(PlayerTurn());
+                yield return new WaitUntil(() => playerDidAction == true);
+            }
+            else
+            {
+                EnemyTurn();
             }
         }
+        Debug.Log("Battle ended");
+        yield return null;
     }
-
 
 
     private IEnumerator PlayerTurn()
     {
         combatState = CombatState.PlayerTurn;
-       Debug.Log("Player turn");
-        yield return new WaitForSeconds(1.0f);
+        Debug.Log("Player turn");
+        while (!playerDidAction)
+        {
+            yield return null;
+        }
+    }
+
+    private void PlayerDidAction(bool actionDone)
+    {
+        playerDidAction = actionDone;
     }
 
     private void EnemyTurn()

@@ -8,15 +8,32 @@ public class ActionButton : MonoBehaviour
 {
     [SerializeField] private Button attackButton;
     public static event Action PlayerAttack;
+    public CombatState combatState;
 
-    private void Start()
+
+    private void Awake()
     {
         attackButton.onClick.AddListener(OnActionButton);
+    }
+
+    private void Update()
+    {
+        DisableButton();
     }
 
     private void OnActionButton()
     {
         Debug.Log("button pressed");
         PlayerAttack?.Invoke();
+    }
+
+    private void DisableButton()
+    {
+        
+    }
+
+    private void OnDisable()
+    {
+        attackButton.onClick.RemoveListener(OnActionButton);
     }
 }
