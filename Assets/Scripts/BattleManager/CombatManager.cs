@@ -12,6 +12,8 @@ public class CombatManager : MonoBehaviour
     private CharacterStats currentCharactersTurn;
     [SerializeField]
     private bool playerDidAction = false;
+    [SerializeField]
+    private bool battleEnded = false;
 
     public static event Action<CombatState> CurrentCombatPhase;
     public CombatState combatState;
@@ -53,22 +55,34 @@ public class CombatManager : MonoBehaviour
         StartCoroutine(Combat());
     }
 
-    private IEnumerator Combat() //Make it to work in while/update loop
+    private IEnumerator Combat()
     {
-        for (int i = 0; i < turnOrder.Count; i++)
+        while (!battleEnded)
         {
-            if (turnOrder[i].IsPlayerCharacter)
+            if (battleEnded)
             {
-                StartCoroutine(PlayerTurn());
-                yield return new WaitUntil(() => playerDidAction == true);
+                break;
             }
             else
             {
-                EnemyTurn();
+                for (int i = 0; i < turnOrder.Count; i++)
+                {
+                    currentCharactersTurn = turnOrder[i];
+                    if (turnOrder[i].IsPlayerCharacter)
+                    {
+                        StartCoroutine(PlayerTurn());
+                        yield return new WaitUntil(() => playerDidAction == true);
+                        playerDidAction = false;
+                    }
+                    else
+                    {
+                        StartCoroutine(EnemyTurn());
+                    }
+                }
             }
+            yield return new WaitUntil(() => battleEnded);
         }
         Debug.Log("Battle ended");
-        yield return null;
     }
 
 
@@ -87,9 +101,10 @@ public class CombatManager : MonoBehaviour
         playerDidAction = actionDone;
     }
 
-    private void EnemyTurn()
+    private IEnumerator EnemyTurn()
     {
         combatState = CombatState.EnemyTurn;
         Debug.Log("Enemy turn");
+        yield return new WaitForSeconds(1f);
     }
 }
