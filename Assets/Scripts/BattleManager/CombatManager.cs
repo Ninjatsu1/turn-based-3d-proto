@@ -61,28 +61,30 @@ public class CombatManager : MonoBehaviour
         {
             if (battleEnded)
             {
-                break;
+                yield return null;
             }
             else
             {
                 for (int i = 0; i < turnOrder.Count; i++)
                 {
                     currentCharactersTurn = turnOrder[i];
+                    Debug.Log("Current characters turn: " + currentCharactersTurn);
                     if (turnOrder[i].IsPlayerCharacter)
                     {
                         StartCoroutine(PlayerTurn());
                         yield return new WaitUntil(() => playerDidAction == true);
-                        playerDidAction = false;
                     }
                     else
                     {
+                        playerDidAction = false;
                         StartCoroutine(EnemyTurn());
                     }
                 }
             }
-            yield return new WaitUntil(() => battleEnded);
         }
         Debug.Log("Battle ended");
+        StopCoroutine(PlayerTurn());
+        StopCoroutine(EnemyTurn());
     }
 
 
@@ -99,10 +101,13 @@ public class CombatManager : MonoBehaviour
     private void PlayerDidAction(bool actionDone)
     {
         playerDidAction = actionDone;
+        Debug.Log("Player did action: " + playerDidAction);
+
     }
 
     private IEnumerator EnemyTurn()
     {
+        Debug.Log("Player did action: " + playerDidAction);
         combatState = CombatState.EnemyTurn;
         Debug.Log("Enemy turn");
         yield return new WaitForSeconds(1f);
