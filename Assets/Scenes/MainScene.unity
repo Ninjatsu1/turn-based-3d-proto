@@ -304,7 +304,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnOrder: []
   currentCharactersTurn: {fileID: 0}
-  playerTurn: 0
+  playerDidAction: 0
+  battleEnded: 0
   combatState: 0
 --- !u!1 &639681786
 GameObject:
@@ -900,7 +901,7 @@ GameObject:
   - component: {fileID: 1457401349}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -14,6 +14,8 @@ public class CombatManager : MonoBehaviour
     private bool playerDidAction = false;
     [SerializeField]
     private bool battleEnded = false;
+    [SerializeField]
+    private bool enemyDidAction = false;
 
     public static event Action<CombatState> CurrentCombatPhase;
     public CombatState combatState;
@@ -68,16 +70,20 @@ public class CombatManager : MonoBehaviour
                 for (int i = 0; i < turnOrder.Count; i++)
                 {
                     currentCharactersTurn = turnOrder[i];
-                    Debug.Log("Current characters turn: " + currentCharactersTurn);
                     if (turnOrder[i].IsPlayerCharacter)
                     {
+                        enemyDidAction = false;
+                        Debug.Log("Current turn: " + currentCharactersTurn);
                         StartCoroutine(PlayerTurn());
                         yield return new WaitUntil(() => playerDidAction == true);
                     }
                     else
                     {
+                        Debug.Log("Current turn: " + currentCharactersTurn);
                         playerDidAction = false;
                         StartCoroutine(EnemyTurn());
+                        yield return new WaitUntil(() => enemyDidAction == true);
+
                     }
                 }
             }
@@ -90,8 +96,10 @@ public class CombatManager : MonoBehaviour
 
     private IEnumerator PlayerTurn()
     {
+        StopCoroutine(EnemyTurn());
         combatState = CombatState.PlayerTurn;
         Debug.Log("Player turn");
+        CurrentCombatPhase?.Invoke(CombatState.PlayerTurn);
         while (!playerDidAction)
         {
             yield return null;
@@ -101,15 +109,22 @@ public class CombatManager : MonoBehaviour
     private void PlayerDidAction(bool actionDone)
     {
         playerDidAction = actionDone;
-        Debug.Log("Player did action: " + playerDidAction);
-
     }
 
     private IEnumerator EnemyTurn()
     {
-        Debug.Log("Player did action: " + playerDidAction);
+        StopCoroutine(PlayerTurn());
         combatState = CombatState.EnemyTurn;
-        Debug.Log("Enemy turn");
-        yield return new WaitForSeconds(1f);
+        CurrentCombatPhase?.Invoke(CombatState.EnemyTurn);
+        
+        while (!enemyDidAction)
+        {
+            yield return null;
+        }
+    }
+
+    private void EnemyDidAction()
+    {
+        enemyDidAction = true;
     }
 }
