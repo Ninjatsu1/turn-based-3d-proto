@@ -23,7 +23,9 @@ public class CombatManager : MonoBehaviour
     private void OnEnable()
     {
         PlayerCombatActions.PlayerDidAction += PlayerDidAction;
+        Character.CharacterEliminated += RemoveCharacterFromTurnOrder;
     }
+
 
     private void Start()
     {
@@ -93,6 +95,10 @@ public class CombatManager : MonoBehaviour
         StopCoroutine(EnemyTurn());
     }
 
+    private void RemoveCharacterFromTurnOrder(Character characterToRemove)
+    {
+        turnOrder.Remove(characterToRemove.CharacterStats);
+    }
 
     private IEnumerator PlayerTurn()
     {
@@ -126,5 +132,11 @@ public class CombatManager : MonoBehaviour
     private void EnemyDidAction()
     {
         enemyDidAction = true;
+    }
+
+    private void OnDisable()
+    {
+        PlayerCombatActions.PlayerDidAction -= PlayerDidAction;
+        Character.CharacterEliminated -= RemoveCharacterFromTurnOrder;
     }
 }
