@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Character : MonoBehaviour, IDamageable
@@ -24,6 +22,7 @@ public class Character : MonoBehaviour, IDamageable
 
     public void Damage(int damage)
     {
+        Debug.Log(Name + " took: " + damage + "amount!");
         CurrentHealh = CurrentHealh - damage;
         if (CurrentHealh <= 0)
         {
