@@ -13,7 +13,9 @@ public class CombatUI : MonoBehaviour
 
     private void OnEnable()
     {
-        CombatManager.CurrentCombatPhase += SetUI;    
+        CombatManager.CurrentCombatPhase += SetUI;
+        Character.CharacterCurrentHealth += UpdateHealth;
+
     }
 
     private void SetUI(CombatState combatState)
@@ -28,9 +30,18 @@ public class CombatUI : MonoBehaviour
         }
     }
 
+    private void UpdateHealth(Character character)
+    {
+        if (character.IsPlayerCharacter)
+        {
+            playerHealth.text = character.CurrentHealh.ToString();
+        }
+    }
+
     private void OnDisable()
     {
         CombatManager.CurrentCombatPhase -= SetUI;
+        Character.CharacterCurrentHealth -= UpdateHealth;
 
     }
 }

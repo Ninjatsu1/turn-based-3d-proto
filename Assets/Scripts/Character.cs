@@ -5,6 +5,7 @@ public class Character : MonoBehaviour, IDamageable
 {
     public CharacterStats CharacterStats;
     public static event Action<Character> CharacterEliminated;
+    public static event Action<Character> CharacterCurrentHealth;
     public string Name;
     public int Attack;
     public int Health;
@@ -26,6 +27,7 @@ public class Character : MonoBehaviour, IDamageable
     {
         Debug.Log(Name + " took: " + damage + "amount!");
         CurrentHealh = CurrentHealh - damage;
+        CharacterCurrentHealth?.Invoke(this);
         if (CurrentHealh <= 0)
         {
             Eliminate();
@@ -43,6 +45,4 @@ public class Character : MonoBehaviour, IDamageable
         CharacterEliminated?.Invoke(this);
         gameObject.SetActive(false);
     }
-
-
 }
