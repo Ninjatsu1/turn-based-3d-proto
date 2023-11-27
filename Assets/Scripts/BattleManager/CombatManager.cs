@@ -97,7 +97,27 @@ public class CombatManager : MonoBehaviour
 
     private void RemoveCharacterFromTurnOrder(Character characterToRemove)
     {
+        if(characterToRemove.IsPlayerCharacter)
+        {
+            CheckPlayersAtRemoval(characterToRemove);
+        }
         turnOrder.Remove(characterToRemove);
+        if(turnOrder.Count == 1)
+        {
+            PlayerWin();
+        }
+    }
+
+    private void PlayerWin()
+    {
+        battleEnded = true;
+        combatState = CombatState.Win;
+    }
+
+    private void CheckPlayersAtRemoval(Character characterToRemove)
+    {
+        battleEnded = true;
+        combatState = CombatState.Lost;
     }
 
     private IEnumerator PlayerTurn()
