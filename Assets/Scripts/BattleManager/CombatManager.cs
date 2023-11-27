@@ -7,9 +7,9 @@ using UnityEngine;
 public class CombatManager : MonoBehaviour
 {
     [SerializeField]
-    private List<CharacterStats> turnOrder = new List<CharacterStats>();
+    private List<Character> turnOrder = new List<Character>();
     [SerializeField]
-    private CharacterStats currentCharactersTurn;
+    private Character currentCharactersTurn;
     [SerializeField]
     private bool playerDidAction = false;
     [SerializeField]
@@ -18,12 +18,16 @@ public class CombatManager : MonoBehaviour
     private bool enemyDidAction = false;
 
     public static event Action<CombatState> CurrentCombatPhase;
+    public static event Action<Character> EnemyAction;
     public CombatState combatState;
 
     private void OnEnable()
     {
         PlayerCombatActions.PlayerDidAction += PlayerDidAction;
+        EnemyCombatActions.EnemyDidAction += EnemyDidAction;
+        Character.CharacterEliminated += RemoveCharacterFromTurnOrder;
     }
+
 
     private void Start()
     {
@@ -39,7 +43,7 @@ public class CombatManager : MonoBehaviour
         charactersArray = FindObjectsOfType<Character>();
         for (int i = 0; i < charactersArray.Length; i++)
         {
-            turnOrder.Add(charactersArray[i].GetComponent<Character>().CharacterStats);
+            turnOrder.Add(charactersArray[i].GetComponent<Character>());
         }
     }
 
@@ -70,18 +74,16 @@ public class CombatManager : MonoBehaviour
                 for (int i = 0; i < turnOrder.Count; i++)
                 {
                     currentCharactersTurn = turnOrder[i];
-                    if (turnOrder[i].IsPlayerCharacter)
+                    if (turnOrder[i].CharacterStats.IsPlayerCharacter)
                     {
                         enemyDidAction = false;
-                        Debug.Log("Current turn: " + currentCharactersTurn);
                         StartCoroutine(PlayerTurn());
                         yield return new WaitUntil(() => playerDidAction == true);
                     }
                     else
                     {
-                        Debug.Log("Current turn: " + currentCharactersTurn);
                         playerDidAction = false;
-                        StartCoroutine(EnemyTurn());
+                        StartCoroutine(EnemyTurn(currentCharactersTurn));
                         yield return new WaitUntil(() => enemyDidAction == true);
 
                     }
@@ -90,13 +92,17 @@ public class CombatManager : MonoBehaviour
         }
         Debug.Log("Battle ended");
         StopCoroutine(PlayerTurn());
-        StopCoroutine(EnemyTurn());
+        StopCoroutine(EnemyTurn(null));
     }
 
+    private void RemoveCharacterFromTurnOrder(Character characterToRemove)
+    {
+        turnOrder.Remove(characterToRemove);
+    }
 
     private IEnumerator PlayerTurn()
     {
-        StopCoroutine(EnemyTurn());
+        StopCoroutine(EnemyTurn(null));
         combatState = CombatState.PlayerTurn;
         Debug.Log("Player turn");
         CurrentCombatPhase?.Invoke(CombatState.PlayerTurn);
@@ -111,20 +117,29 @@ public class CombatManager : MonoBehaviour
         playerDidAction = actionDone;
     }
 
-    private IEnumerator EnemyTurn()
+    private IEnumerator EnemyTurn(Character currentEnemy)
     {
         StopCoroutine(PlayerTurn());
         combatState = CombatState.EnemyTurn;
+        EnemyAction?.Invoke(currentCharactersTurn);
         CurrentCombatPhase?.Invoke(CombatState.EnemyTurn);
-        
+        var enemy = currentEnemy.GetComponent<Character>();
+        Debug.Log("HEALTH: " + enemy.CurrentHealh);
         while (!enemyDidAction)
         {
             yield return null;
         }
     }
 
-    private void EnemyDidAction()
+    private void EnemyDidAction(bool enemyFinishedAction)
     {
-        enemyDidAction = true;
+        enemyDidAction = enemyFinishedAction;
+    }
+
+    private void OnDisable()
+    {
+        PlayerCombatActions.PlayerDidAction -= PlayerDidAction;
+        EnemyCombatActions.EnemyDidAction -= EnemyDidAction;
+        Character.CharacterEliminated -= RemoveCharacterFromTurnOrder;
     }
 }

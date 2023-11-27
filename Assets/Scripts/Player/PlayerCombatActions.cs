@@ -7,7 +7,14 @@ public class PlayerCombatActions : MonoBehaviour
     public static event Action<GameObject> SetPlayerTarget;
     public static event Action RemovePlayerTarget;
     public GameObject PlayerTargetObject = null;
+    
     private readonly string enemyTag = "Enemy";
+    private Character playerStats;
+
+    private void Awake()
+    {
+        playerStats = GetComponent<Character>();
+    }
 
     private void OnEnable()
     {
@@ -40,6 +47,11 @@ public class PlayerCombatActions : MonoBehaviour
     private void PlayerCombatAction()
     {
         Debug.Log("Attacking");
+        Character target = PlayerTargetObject.GetComponent<Character>();
+        if(target is IDamageable)
+        {
+            target.Damage(playerStats.Attack);
+        }
         PlayerDidAction?.Invoke(true);
     }
     

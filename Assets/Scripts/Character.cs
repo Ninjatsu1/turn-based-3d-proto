@@ -1,31 +1,46 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class Character : MonoBehaviour
+public class Character : MonoBehaviour, IDamageable
 {
     public CharacterStats CharacterStats;
-
+    public static event Action<Character> CharacterEliminated;
     public string Name;
     public int Attack;
     public int Health;
+    public int CurrentHealh;
     public int Speed;
 
     private void Awake()
     {
-         Name = CharacterStats.Name;
-         Attack = CharacterStats.Attack;
-         Health = CharacterStats.Health;
-         Speed = CharacterStats.Speed;
+        Name = CharacterStats.Name;
+        Attack = CharacterStats.Attack;
+        Health = CharacterStats.MaximumHealth;
+        Speed = CharacterStats.Speed;
+        CurrentHealh = Health;
     }
 
-    public void DamageCharacter(int damageAmount)
+    public void Damage(int damage)
     {
-        Health = Health - damageAmount;
+        Debug.Log(Name + " took: " + damage + "amount!");
+        CurrentHealh = CurrentHealh - damage;
+        if (CurrentHealh <= 0)
+        {
+            Eliminate();
+        }
     }
 
-    public void HealCharacter(int healAmount)
+    public void Heal(int heal)
     {
-
+        throw new System.NotImplementedException();
     }
+
+    public void Eliminate()
+    {
+        Debug.Log("Eliminated: " + Name);
+        CharacterEliminated?.Invoke(this);
+        gameObject.SetActive(false);
+    }
+
+
 }

@@ -306,6 +306,7 @@ MonoBehaviour:
   currentCharactersTurn: {fileID: 0}
   playerDidAction: 0
   battleEnded: 0
+  enemyDidAction: 0
   combatState: 0
 --- !u!1 &639681786
 GameObject:
@@ -1176,6 +1177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackButton: {fileID: 2040845653}
+  currentTarget: {fileID: 0}
   combatState: 0
 --- !u!1001 &1373694244460638912
 PrefabInstance:
@@ -1291,7 +1293,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3553282294913310924, guid: 7426c8b0fad00bf4abf65c653b41fec6, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7426c8b0fad00bf4abf65c653b41fec6, type: 3}
