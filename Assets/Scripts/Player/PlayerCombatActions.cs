@@ -4,7 +4,7 @@ using System;
 public class PlayerCombatActions : MonoBehaviour
 {
     public static event Action<bool> PlayerDidAction;
-    public static event Action<GameObject> SetPlayerTarget;
+    public static event Action<Character> SetPlayerTarget;
     public static event Action RemovePlayerTarget;
     public GameObject PlayerTargetObject = null;
     
@@ -33,7 +33,7 @@ public class PlayerCombatActions : MonoBehaviour
 				if (hitInfo.transform.gameObject.tag == enemyTag)
 				{
                     PlayerTargetObject = hitInfo.transform.gameObject;
-                    SetPlayerTarget?.Invoke(PlayerTargetObject);
+                    SetPlayerTarget?.Invoke(PlayerTargetObject.GetComponent<Character>());
                 }
 			}
 		}
@@ -54,8 +54,6 @@ public class PlayerCombatActions : MonoBehaviour
         }
         PlayerDidAction?.Invoke(true);
     }
-    
-
 
     private void OnDisable()
     {

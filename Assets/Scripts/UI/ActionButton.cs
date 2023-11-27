@@ -42,9 +42,9 @@ public class ActionButton : MonoBehaviour
         PlayerAttack?.Invoke();
     }
 
-    private void SetTarget(GameObject target)
+    private void SetTarget(Character target)
     {
-        currentTarget = target;
+        currentTarget = target.gameObject;
     }
 
     private void RemoveTarget()

@@ -5,17 +5,23 @@ using TMPro;
 
 public class CombatUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI playerName;
-    [SerializeField] private TextMeshProUGUI playerHealth;
-    [SerializeField] private GameObject combatButtons;
-
+    [SerializeField]
+    private TextMeshProUGUI playerName;
+    [SerializeField]
+    private TextMeshProUGUI playerHealth;
+    [SerializeField]
+    private GameObject combatButtons;
+    [SerializeField]
+    private TextMeshProUGUI enemyName;
+    [SerializeField]
+    private TextMeshProUGUI enemyHealth;
     private GameObject player;
 
     private void OnEnable()
     {
         CombatManager.CurrentCombatPhase += SetUI;
         Character.CharacterCurrentHealth += UpdateHealth;
-
+        PlayerCombatActions.SetPlayerTarget += DisplayEnemyHealth;
     }
 
     private void SetUI(CombatState combatState)
@@ -38,10 +44,19 @@ public class CombatUI : MonoBehaviour
         }
     }
 
+    private void DisplayEnemyHealth(Character character)
+    {
+        if(!character.IsPlayerCharacter)
+        {
+            enemyName.text = character.Name;
+            enemyHealth.text = character.CurrentHealh.ToString();
+        }
+    }
+
     private void OnDisable()
     {
         CombatManager.CurrentCombatPhase -= SetUI;
         Character.CharacterCurrentHealth -= UpdateHealth;
-
+        PlayerCombatActions.SetPlayerTarget -= DisplayEnemyHealth;
     }
 }
