@@ -10,6 +10,7 @@ public class Character : MonoBehaviour, IDamageable
     public int Health;
     public int CurrentHealh;
     public int Speed;
+    public bool IsPlayerCharacter;
 
     private void Awake()
     {
@@ -18,6 +19,7 @@ public class Character : MonoBehaviour, IDamageable
         Health = CharacterStats.MaximumHealth;
         Speed = CharacterStats.Speed;
         CurrentHealh = Health;
+        IsPlayerCharacter = CharacterStats.IsPlayerCharacter;
     }
 
     public void Damage(int damage)
