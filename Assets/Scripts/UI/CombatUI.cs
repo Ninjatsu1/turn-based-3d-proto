@@ -22,6 +22,7 @@ public class CombatUI : MonoBehaviour
         CombatManager.CurrentCombatPhase += SetUI;
         Character.CharacterCurrentHealth += UpdateHealth;
         PlayerCombatActions.SetPlayerTarget += DisplayEnemyHealth;
+        PlayerCombatActions.RemovePlayerTarget += OnDeselectEnemy;
     }
 
     private void SetUI(CombatState combatState)
@@ -34,6 +35,10 @@ public class CombatUI : MonoBehaviour
             playerHealth.text = character.Health.ToString();
             combatButtons.SetActive(true);
         }
+       if(combatState == CombatState.Win)
+        {
+            OnDeselectEnemy();
+        }
     }
 
     private void UpdateHealth(Character character)
@@ -41,6 +46,12 @@ public class CombatUI : MonoBehaviour
         if (character.IsPlayerCharacter)
         {
             playerHealth.text = character.CurrentHealh.ToString();
+        } else
+        {
+            if(enemyName.text == character.Name)
+            {
+                enemyHealth.text = character.CurrentHealh.ToString();
+            }
         }
     }
 
@@ -50,7 +61,15 @@ public class CombatUI : MonoBehaviour
         {
             enemyName.text = character.Name;
             enemyHealth.text = character.CurrentHealh.ToString();
+            enemyHealth.gameObject.SetActive(true);
+            enemyName.gameObject.SetActive(true);
         }
+    }
+
+    private void OnDeselectEnemy()
+    {
+        enemyHealth.gameObject.SetActive(false);
+        enemyName.gameObject.SetActive(false);
     }
 
     private void OnDisable()
@@ -58,5 +77,6 @@ public class CombatUI : MonoBehaviour
         CombatManager.CurrentCombatPhase -= SetUI;
         Character.CharacterCurrentHealth -= UpdateHealth;
         PlayerCombatActions.SetPlayerTarget -= DisplayEnemyHealth;
+        PlayerCombatActions.RemovePlayerTarget -= OnDeselectEnemy;
     }
 }
