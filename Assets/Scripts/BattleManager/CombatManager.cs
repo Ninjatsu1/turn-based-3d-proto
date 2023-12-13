@@ -112,12 +112,14 @@ public class CombatManager : MonoBehaviour
     {
         battleEnded = true;
         combatState = CombatState.Win;
+        CurrentCombatPhase?.Invoke(combatState);
     }
 
     private void CheckPlayersAtRemoval(Character characterToRemove)
     {
         battleEnded = true;
         combatState = CombatState.Lost;
+        CurrentCombatPhase?.Invoke(combatState);
     }
 
     private IEnumerator PlayerTurn()

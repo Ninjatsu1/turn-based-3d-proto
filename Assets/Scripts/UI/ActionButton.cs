@@ -10,8 +10,6 @@ public class ActionButton : MonoBehaviour
     private GameObject currentTarget;
 
     public static event Action PlayerAttack;
-    public CombatState combatState;
-
 
     private void Awake()
     {
@@ -25,15 +23,9 @@ public class ActionButton : MonoBehaviour
         PlayerCombatActions.RemovePlayerTarget += RemoveTarget;
     }
 
-    private void Update()
+    private void Start()
     {
-        if(currentTarget == null)
-        {
-            attackButton.interactable = false;
-        } else
-        {
-            attackButton.interactable = true;
-        }
+        attackButton.interactable = false;
     }
 
     private void OnActionButton()
@@ -42,18 +34,21 @@ public class ActionButton : MonoBehaviour
         PlayerAttack?.Invoke();
     }
 
-    private void SetTarget(GameObject target)
+    private void SetTarget(Character target)
     {
-        currentTarget = target;
+        attackButton.interactable = true;
+        currentTarget = target.gameObject;
     }
 
     private void RemoveTarget()
     {
+        attackButton.interactable = false;
         currentTarget = null;
     }
 
     private void DisableButton(CombatState combatState)
     {
+        Debug.Log("Button state: " + combatState);
         switch (combatState)
         {
             case CombatState.Setup:
@@ -65,8 +60,10 @@ public class ActionButton : MonoBehaviour
                 attackButton.interactable = false;
                 break;
             case CombatState.Win:
+                attackButton.interactable = false;
                 break;
             case CombatState.Lost:
+                attackButton.interactable = false;
                 break;
             default:
                 break;

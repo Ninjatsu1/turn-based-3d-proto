@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cb9dd53a994e5b40bd095dac306cd6f, type: 3}
   m_Name: Enemy 1
   m_EditorClassIdentifier: 
-  Name: Name?
+  Name: Purple
   Attack: 5
-  Health: 20
+  MaximumHealth: 20
+  CurrentHealth: 0
   Speed: 4
   Prefab: {fileID: 9012670569659480088, guid: 8d306d48be8b5de47af236652a402743, type: 3}
+  IsPlayerCharacter: 0

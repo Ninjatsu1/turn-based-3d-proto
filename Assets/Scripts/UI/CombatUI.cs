@@ -5,17 +5,24 @@ using TMPro;
 
 public class CombatUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI playerName;
-    [SerializeField] private TextMeshProUGUI playerHealth;
-    [SerializeField] private GameObject combatButtons;
-
+    [SerializeField]
+    private TextMeshProUGUI playerName;
+    [SerializeField]
+    private TextMeshProUGUI playerHealth;
+    [SerializeField]
+    private GameObject combatButtons;
+    [SerializeField]
+    private TextMeshProUGUI enemyName;
+    [SerializeField]
+    private TextMeshProUGUI enemyHealth;
     private GameObject player;
 
     private void OnEnable()
     {
         CombatManager.CurrentCombatPhase += SetUI;
         Character.CharacterCurrentHealth += UpdateHealth;
-
+        PlayerCombatActions.SetPlayerTarget += DisplayEnemyHealth;
+        PlayerCombatActions.RemovePlayerTarget += OnDeselectEnemy;
     }
 
     private void SetUI(CombatState combatState)
@@ -28,6 +35,10 @@ public class CombatUI : MonoBehaviour
             playerHealth.text = character.Health.ToString();
             combatButtons.SetActive(true);
         }
+       if(combatState == CombatState.Win)
+        {
+            OnDeselectEnemy();
+        }
     }
 
     private void UpdateHealth(Character character)
@@ -35,13 +46,37 @@ public class CombatUI : MonoBehaviour
         if (character.IsPlayerCharacter)
         {
             playerHealth.text = character.CurrentHealh.ToString();
+        } else
+        {
+            if(enemyName.text == character.Name)
+            {
+                enemyHealth.text = character.CurrentHealh.ToString();
+            }
         }
+    }
+
+    private void DisplayEnemyHealth(Character character)
+    {
+        if(!character.IsPlayerCharacter)
+        {
+            enemyName.text = character.Name;
+            enemyHealth.text = character.CurrentHealh.ToString();
+            enemyHealth.gameObject.SetActive(true);
+            enemyName.gameObject.SetActive(true);
+        }
+    }
+
+    private void OnDeselectEnemy()
+    {
+        enemyHealth.gameObject.SetActive(false);
+        enemyName.gameObject.SetActive(false);
     }
 
     private void OnDisable()
     {
         CombatManager.CurrentCombatPhase -= SetUI;
         Character.CharacterCurrentHealth -= UpdateHealth;
-
+        PlayerCombatActions.SetPlayerTarget -= DisplayEnemyHealth;
+        PlayerCombatActions.RemovePlayerTarget -= OnDeselectEnemy;
     }
 }
