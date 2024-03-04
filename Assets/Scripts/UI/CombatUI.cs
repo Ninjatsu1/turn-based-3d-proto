@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class CombatUI : MonoBehaviour
 {
@@ -10,11 +9,19 @@ public class CombatUI : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI playerHealth;
     [SerializeField]
+    private Slider playerHealthSlider;
+
+    [SerializeField]
     private GameObject combatButtons;
+    [SerializeField]
+    private GameObject enemyHealthPanel;
     [SerializeField]
     private TextMeshProUGUI enemyName;
     [SerializeField]
     private TextMeshProUGUI enemyHealth;
+    [SerializeField]
+    private Slider enemyHealthSlider;
+
     private GameObject player;
 
     private void OnEnable()
@@ -31,9 +38,13 @@ public class CombatUI : MonoBehaviour
         {
             player = GameObject.FindGameObjectWithTag("Player");
             Character character = player.GetComponent<Character>();
+
             playerName.text = character.Name;
-            playerHealth.text = character.Health.ToString();
+            playerHealth.text = character.MaxHealth.ToString();
+            playerHealthSlider.maxValue = character.MaxHealth;
+            playerHealthSlider.value = character.CurrentHealh;
             combatButtons.SetActive(true);
+            
         }
        if(combatState == CombatState.Win)
         {
@@ -46,11 +57,14 @@ public class CombatUI : MonoBehaviour
         if (character.IsPlayerCharacter)
         {
             playerHealth.text = character.CurrentHealh.ToString();
+            playerHealthSlider.value = character.CurrentHealh;
         } else
         {
             if(enemyName.text == character.Name)
             {
                 enemyHealth.text = character.CurrentHealh.ToString();
+                enemyHealthSlider.maxValue = character.MaxHealth;
+                enemyHealthSlider.value = character.CurrentHealh;
             }
         }
     }
@@ -61,15 +75,15 @@ public class CombatUI : MonoBehaviour
         {
             enemyName.text = character.Name;
             enemyHealth.text = character.CurrentHealh.ToString();
-            enemyHealth.gameObject.SetActive(true);
-            enemyName.gameObject.SetActive(true);
+            enemyHealthSlider.maxValue = character.MaxHealth;
+            enemyHealthSlider.value = character.CurrentHealh;
+            enemyHealthPanel.SetActive(true);
         }
     }
 
     private void OnDeselectEnemy()
     {
-        enemyHealth.gameObject.SetActive(false);
-        enemyName.gameObject.SetActive(false);
+        enemyHealthPanel.SetActive(false);
     }
 
     private void OnDisable()
