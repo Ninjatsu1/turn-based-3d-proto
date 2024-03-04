@@ -8,7 +8,7 @@ public class Character : MonoBehaviour, IDamageable
     public static event Action<Character> CharacterCurrentHealth;
     public string Name;
     public int Attack;
-    public int Health;
+    public int MaxHealth;
     public int CurrentHealh;
     public int Speed;
     public bool IsPlayerCharacter;
@@ -17,9 +17,9 @@ public class Character : MonoBehaviour, IDamageable
     {
         Name = CharacterStats.Name;
         Attack = CharacterStats.Attack;
-        Health = CharacterStats.MaximumHealth;
+        MaxHealth = CharacterStats.MaximumHealth;
         Speed = CharacterStats.Speed;
-        CurrentHealh = Health;
+        CurrentHealh = MaxHealth;
         IsPlayerCharacter = CharacterStats.IsPlayerCharacter;
     }
 
