@@ -6,6 +6,7 @@ using System;
 public class Projecetile : MonoBehaviour
 {
     public static event Action<Character, Character> ProjectileReachedDestination;
+    private int damage = 5;
 
     private Character originalShooter;
     private Character target;
@@ -33,7 +34,7 @@ public class Projecetile : MonoBehaviour
         if(collidedObject.GetComponent<Character>() != null)
         {
             ProjectileReachedDestination?.Invoke(originalShooter, target);
-            target.Damage(10);
+            target.Damage(damage);
             Debug.Log("Damagable!");
             Destroy(gameObject);
         } else
