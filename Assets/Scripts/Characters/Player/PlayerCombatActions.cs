@@ -6,8 +6,13 @@ public class PlayerCombatActions : MonoBehaviour
     public static event Action<bool> PlayerDidAction;
     public static event Action<Character> SetPlayerTarget;
     public static event Action RemovePlayerTarget;
+
+    [SerializeField]
+    private Transform projectileSpawn;
+    [SerializeField]
+    private GameObject projectile; //Possible refactor later
+
     private GameObject playerTargetObject = null;
-    
     private readonly string enemyTag = "Enemy";
     private Character playerStats;
 
@@ -19,6 +24,7 @@ public class PlayerCombatActions : MonoBehaviour
     private void OnEnable()
     {
         ActionButton.PlayerAttack += PlayerCombatAction;
+        Projecetile.ProjectileReachedDestination += ProjectileReachedDestination;
         Character.CharacterEliminated += DeselectEnemy;
     }
 
@@ -59,13 +65,20 @@ public class PlayerCombatActions : MonoBehaviour
 
     private void PlayerCombatAction()
     {
-        Debug.Log("Attacking");
         Character target = playerTargetObject.GetComponent<Character>();
         if(target is IDamageable)
         {
-            target.Damage(playerStats.Attack);
+            GameObject projectileToShoot = Instantiate(projectile, projectileSpawn);
+            projectileToShoot.GetComponent<Projecetile>().SetTarget(playerStats, target);
         }
-        PlayerDidAction?.Invoke(true);
+    }
+
+    private void ProjectileReachedDestination(Character whoShot, Character target)
+    {
+        if(whoShot.IsPlayerCharacter)
+        {
+            PlayerDidAction?.Invoke(true);
+        } 
     }
 
     private void OnDisable()

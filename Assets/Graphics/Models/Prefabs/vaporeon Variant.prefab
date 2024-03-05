@@ -1,10 +1,42 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2507272045677361588
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7389830263685841153}
+  m_Layer: 0
+  m_Name: ProjectileSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7389830263685841153
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2507272045677361588}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.22, y: 0, z: 1.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5267815689556668836}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &5661503057162950223
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: a8dc3eba1dcfc4b4092e7f89f5c19dad, type: 3}
@@ -64,6 +96,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: fa21013556a349e4e925a8fcd02efcc0, type: 2}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: a8dc3eba1dcfc4b4092e7f89f5c19dad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7389830263685841153}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a8dc3eba1dcfc4b4092e7f89f5c19dad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2011480158}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a8dc3eba1dcfc4b4092e7f89f5c19dad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2011480159}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a8dc3eba1dcfc4b4092e7f89f5c19dad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2700873119394674323}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a8dc3eba1dcfc4b4092e7f89f5c19dad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3142214166339526413}
   m_SourcePrefab: {fileID: 100100000, guid: a8dc3eba1dcfc4b4092e7f89f5c19dad, type: 3}
 --- !u!1 &4778559831205309214 stripped
 GameObject:
@@ -104,6 +154,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f884c0a64f8010d41a8901c6d41e79b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2700873119394674323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4778559831205309214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd724a91699cb2d4597a9588fbdd2829, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectileSpawn: {fileID: 7389830263685841153}
+  projectile: {fileID: 2123386399495515526, guid: 1c115948c962e4646b3025d2c62339c7, type: 3}
 --- !u!114 &3142214166339526413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,17 +183,12 @@ MonoBehaviour:
   CharacterStats: {fileID: 11400000, guid: 9c714bd57e9c8aa41a67ffc9637b828e, type: 2}
   Name: 
   Attack: 0
-  Health: 0
+  MaxHealth: 0
+  CurrentHealh: 0
   Speed: 0
---- !u!114 &2700873119394674323
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  IsPlayerCharacter: 0
+--- !u!4 &5267815689556668836 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a8dc3eba1dcfc4b4092e7f89f5c19dad, type: 3}
+  m_PrefabInstance: {fileID: 5661503057162950223}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4778559831205309214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd724a91699cb2d4597a9588fbdd2829, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
