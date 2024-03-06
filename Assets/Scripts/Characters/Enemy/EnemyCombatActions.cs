@@ -3,14 +3,20 @@ using UnityEngine;
 
 public class EnemyCombatActions : MonoBehaviour
 {
+    public static Action<bool> EnemyDidAction;
+
+    [SerializeField]
+    private GameObject projectile;
+    [SerializeField]
+    private Transform projectileSpawn;
     private Character target;
     private static readonly string playerTag = "Player";
     private Character characterStats;
-    public static Action<bool> EnemyDidAction;
 
     private void OnEnable()
     {
         CombatManager.EnemyAction += DoAction;
+        Projecetile.ProjectileReachedDestination += ProjectileReachedDestination;
     }
 
     private void Start()
@@ -28,21 +34,29 @@ public class EnemyCombatActions : MonoBehaviour
     {
         Debug.Log("Attacking: " + target);
         AttackTarget();
-        EnemyDidAction?.Invoke(true);
+
+    }
+
+    private void ProjectileReachedDestination(Character whoShot, Character target)
+    {
+        if (!whoShot.IsPlayerCharacter)
+        {
+            EnemyDidAction?.Invoke(true);
+        }
     }
 
     private void AttackTarget()
     {
         if(target is IDamageable)
         {
-           Character targetCharacter = target.GetComponent<Character>();
-           targetCharacter.Damage(characterStats.Attack);
+            GameObject projectileToShoot = Instantiate(projectile, projectileSpawn);
+            projectileToShoot.GetComponent<Projecetile>().SetTarget(characterStats, target);
         }
     }
 
     private void OnDisable()
     {
         CombatManager.EnemyAction -= DoAction;
-
+        Projecetile.ProjectileReachedDestination -= ProjectileReachedDestination;
     }
 }

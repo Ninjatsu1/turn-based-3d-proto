@@ -85,6 +85,6 @@ public class PlayerCombatActions : MonoBehaviour
     {
         ActionButton.PlayerAttack += PlayerCombatAction;
         Character.CharacterEliminated -= DeselectEnemy;
-
+        Projecetile.ProjectileReachedDestination -= ProjectileReachedDestination;
     }
 }
