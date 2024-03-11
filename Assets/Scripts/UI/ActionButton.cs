@@ -32,6 +32,7 @@ public class ActionButton : MonoBehaviour
     {
         Debug.Log("button pressed");
         PlayerAttack?.Invoke();
+        attackButton.interactable = false;
     }
 
     private void SetTarget(Character target)
@@ -54,6 +55,7 @@ public class ActionButton : MonoBehaviour
             case CombatState.Setup:
                 break;
             case CombatState.PlayerTurn:
+                if(currentTarget != null)
                 attackButton.interactable = true;
                 break;
             case CombatState.EnemyTurn:
