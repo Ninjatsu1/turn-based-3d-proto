@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/Characters", order = 1)]
 public class CharacterStats : ScriptableObject
@@ -8,6 +10,6 @@ public class CharacterStats : ScriptableObject
     public int MaximumHealth = 20;
     public int CurrentHealth = 0;
     public int Speed = 10;
-    public GameObject Prefab;
     public bool IsPlayerCharacter = false;
+    public List<Skill> Skills = new List<Skill>();
 }
