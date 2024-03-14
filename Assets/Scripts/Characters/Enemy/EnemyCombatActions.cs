@@ -50,7 +50,7 @@ public class EnemyCombatActions : MonoBehaviour
         if(target is IDamageable)
         {
             GameObject projectileToShoot = Instantiate(projectile, projectileSpawn);
-            projectileToShoot.GetComponent<Projecetile>().SetTarget(characterStats, target);
+            projectileToShoot.GetComponent<Projecetile>().SetTarget(characterStats, target, 1); //Make enemies to use skills
         }
     }
 

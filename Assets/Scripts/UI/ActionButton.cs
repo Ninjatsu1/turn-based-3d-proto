@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ActionButton : MonoBehaviour
 {
@@ -8,19 +9,31 @@ public class ActionButton : MonoBehaviour
     private Button attackButton;
     [SerializeField]
     private GameObject currentTarget;
+    [SerializeField]
+    private Skill skill;
+    [SerializeField]
+    private TextMeshProUGUI buttonText;
 
-    public static event Action PlayerAttack;
+    private Image buttonImage;
+    private Color buttonColor;
+    private event Action DisableButton;
+
+    public static event Action<Skill> PlayerAttack;
+    public static event Action RemoveTarget;
+
 
     private void Awake()
     {
         attackButton.onClick.AddListener(OnActionButton);
+        buttonImage = GetComponent<Image>();
     }
 
     private void OnEnable()
     {
-        CombatManager.CurrentCombatPhase += DisableButton;
+        CombatManager.CurrentCombatPhase += BasedOnCombatState;
         PlayerCombatActions.SetPlayerTarget += SetTarget;
         PlayerCombatActions.RemovePlayerTarget += RemoveTarget;
+        RemoveTarget += RemoveTargetFromButtons;
     }
 
     private void Start()
@@ -31,8 +44,8 @@ public class ActionButton : MonoBehaviour
     private void OnActionButton()
     {
         Debug.Log("button pressed");
-        PlayerAttack?.Invoke();
-        attackButton.interactable = false;
+        PlayerAttack?.Invoke(skill);
+        RemoveTarget?.Invoke();
     }
 
     private void SetTarget(Character target)
@@ -41,13 +54,19 @@ public class ActionButton : MonoBehaviour
         currentTarget = target.gameObject;
     }
 
-    private void RemoveTarget()
+    private void RemoveTargetFromButtons()
     {
         attackButton.interactable = false;
         currentTarget = null;
     }
 
-    private void DisableButton(CombatState combatState)
+    public void SetScriptableObject(Skill skillScriptableObject)
+    {
+        skill = skillScriptableObject;
+        buttonText.text = skill.SkillName;
+    }
+
+    private void BasedOnCombatState(CombatState combatState)
     {
         Debug.Log("Button state: " + combatState);
         switch (combatState)
@@ -75,8 +94,10 @@ public class ActionButton : MonoBehaviour
     private void OnDisable()
     {
         attackButton.onClick.RemoveListener(OnActionButton);
-        CombatManager.CurrentCombatPhase -= DisableButton;
+        CombatManager.CurrentCombatPhase -= BasedOnCombatState;
         PlayerCombatActions.SetPlayerTarget -= SetTarget;
         PlayerCombatActions.RemovePlayerTarget -= RemoveTarget;
+        RemoveTarget += RemoveTargetFromButtons;
+
     }
 }

@@ -47,9 +47,7 @@ public class CombatUI : MonoBehaviour
             playerHealthSlider.maxValue = character.MaxHealth;
             playerHealthSlider.value = character.CurrentHealh;
             GetButtons(character);
-            DisplayButtons();
-            //combatButtons.SetActive(true);
-            
+            DisplayButtons();            
         }
        if(combatState == CombatState.Win)
         {
@@ -63,6 +61,7 @@ public class CombatUI : MonoBehaviour
         {
             Button button = Instantiate(character.CharacterStats.Skills[i].SkillButton);
             button.transform.parent = footer.transform;
+            button.GetComponent<ActionButton>().SetScriptableObject(character.CharacterStats.Skills[i]);
         }
     }
 

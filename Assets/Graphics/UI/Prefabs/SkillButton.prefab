@@ -148,12 +148,12 @@ GameObject:
   - component: {fileID: 3302593779575672470}
   - component: {fileID: 3302593779575672475}
   m_Layer: 5
-  m_Name: BasicAttack
+  m_Name: SkillButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3302593779575672471
 RectTransform:
   m_ObjectHideFlags: 0
@@ -195,7 +195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.7893378, g: 0.9245283, b: 0.90492773, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -270,3 +270,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackButton: {fileID: 3302593779575672470}
   currentTarget: {fileID: 0}
+  skill: {fileID: 0}
+  buttonText: {fileID: 3302593778947179567}

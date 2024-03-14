@@ -9,4 +9,7 @@ public class Skill : ScriptableObject
 {
     public int DamageAmount = 1;
     public Button SkillButton;
+    public string SkillName = "";
+    public Projecetile SkillObject;
+    public Color ButtonColor;
 }
