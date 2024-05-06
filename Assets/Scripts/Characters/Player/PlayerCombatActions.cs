@@ -63,13 +63,13 @@ public class PlayerCombatActions : MonoBehaviour
         }
     }
 
-    private void PlayerCombatAction()
+    private void PlayerCombatAction(Skill skill)
     {
         Character target = playerTargetObject.GetComponent<Character>();
         if(target is IDamageable)
         {
-            GameObject projectileToShoot = Instantiate(projectile, projectileSpawn);
-            projectileToShoot.GetComponent<Projecetile>().SetTarget(playerStats, target);
+            GameObject projectileToShoot = Instantiate(skill.SkillObject.gameObject, projectileSpawn);
+            projectileToShoot.GetComponent<Projecetile>().SetTarget(playerStats, target, skill.DamageAmount);
         }
     }
 

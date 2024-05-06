@@ -6,18 +6,19 @@ using System;
 public class Projecetile : MonoBehaviour
 {
     public static event Action<Character, Character> ProjectileReachedDestination;
-    private int damage = 5;
+    private int projectileDamage;
 
     private Character originalShooter;
     private Character target;
     private bool hasTarget = false;
 
-    public void SetTarget(Character whoShot, Character targetToReach)
+    public void SetTarget(Character whoShot, Character targetToReach, int damage)
     {
         Debug.Log("Target: " + target);
         hasTarget = true;
         originalShooter = whoShot;
         target = targetToReach;
+        projectileDamage = damage;
     }
 
     private void Update()
@@ -34,7 +35,7 @@ public class Projecetile : MonoBehaviour
         if(collidedObject.GetComponent<Character>() != null)
         {
             ProjectileReachedDestination?.Invoke(originalShooter, target);
-            target.Damage(damage);
+            target.Damage(projectileDamage);
             Debug.Log("Damagable!");
             Destroy(gameObject);
         } else

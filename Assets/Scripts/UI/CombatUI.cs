@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class CombatUI : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class CombatUI : MonoBehaviour
     private Slider playerHealthSlider;
 
     [SerializeField]
-    private GameObject combatButtons;
+    private List<Button> combatButtons = new List<Button>();
     [SerializeField]
     private GameObject enemyHealthPanel;
     [SerializeField]
@@ -21,6 +22,8 @@ public class CombatUI : MonoBehaviour
     private TextMeshProUGUI enemyHealth;
     [SerializeField]
     private Slider enemyHealthSlider;
+    [SerializeField]
+    private GameObject footer;
 
     private GameObject player;
 
@@ -43,12 +46,30 @@ public class CombatUI : MonoBehaviour
             playerHealth.text = character.MaxHealth.ToString();
             playerHealthSlider.maxValue = character.MaxHealth;
             playerHealthSlider.value = character.CurrentHealh;
-            combatButtons.SetActive(true);
-            
+            GetButtons(character);
+            DisplayButtons();            
         }
        if(combatState == CombatState.Win)
         {
             OnDeselectEnemy();
+        }
+    }
+
+    private void GetButtons(Character character)
+    {
+        for (int i = 0; i < character.CharacterStats.Skills.Count; i++)
+        {
+            Button button = Instantiate(character.CharacterStats.Skills[i].SkillButton);
+            button.transform.parent = footer.transform;
+            button.GetComponent<ActionButton>().SetScriptableObject(character.CharacterStats.Skills[i]);
+        }
+    }
+
+    private void DisplayButtons()
+    {
+        for (int i = 0; i < footer.transform.childCount; i++)
+        {
+            footer.transform.GetChild(i).gameObject.SetActive(true);
         }
     }
 

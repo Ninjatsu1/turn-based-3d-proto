@@ -14,7 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Name?
   Attack: 5
-  Health: 20
+  MaximumHealth: 20
+  CurrentHealth: 0
   Speed: 12
-  Prefab: {fileID: 3553282294913310924, guid: 7426c8b0fad00bf4abf65c653b41fec6, type: 3}
   IsPlayerCharacter: 0
+  Skills:
+  - {fileID: 11400000, guid: 287cffc05ab6ad643a1dc8bc9a0d6bf6, type: 2}
+  - {fileID: 11400000, guid: e502536a832b4bd4ab05210425d17ca9, type: 2}
