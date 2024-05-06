@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Character : MonoBehaviour, IDamageable
@@ -6,6 +7,7 @@ public class Character : MonoBehaviour, IDamageable
     public CharacterStats CharacterStats;
     public static event Action<Character> CharacterEliminated;
     public static event Action<Character> CharacterCurrentHealth;
+    public List<Skill> CharacterSkills = new List<Skill>();
     public string Name;
     public int Attack;
     public int MaxHealth;
@@ -20,6 +22,7 @@ public class Character : MonoBehaviour, IDamageable
         MaxHealth = CharacterStats.MaximumHealth;
         Speed = CharacterStats.Speed;
         CurrentHealh = MaxHealth;
+        CharacterSkills = CharacterStats.Skills;
         IsPlayerCharacter = CharacterStats.IsPlayerCharacter;
     }
 

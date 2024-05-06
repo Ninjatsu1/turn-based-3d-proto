@@ -49,9 +49,18 @@ public class EnemyCombatActions : MonoBehaviour
     {
         if(target is IDamageable)
         {
-            GameObject projectileToShoot = Instantiate(projectile, projectileSpawn);
-            projectileToShoot.GetComponent<Projecetile>().SetTarget(characterStats, target, 1); //Make enemies to use skills
+            int pickedSkill = PickSkill();
+            GameObject objectToSpawn = characterStats.CharacterSkills[pickedSkill].SkillObject.gameObject;
+            GameObject projectileToShoot = Instantiate(objectToSpawn, projectileSpawn);
+            
+            projectileToShoot.GetComponent<Projecetile>().SetTarget(characterStats, target, pickedSkill);
         }
+    }
+
+    private int PickSkill()
+    {
+        int randomSkill = UnityEngine.Random.Range(0, characterStats.CharacterSkills.Count);
+        return randomSkill;
     }
 
     private void OnDisable()
