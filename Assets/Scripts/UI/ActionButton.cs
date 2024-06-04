@@ -13,6 +13,8 @@ public class ActionButton : MonoBehaviour
     private Skill skill;
     [SerializeField]
     private TextMeshProUGUI buttonText;
+    [SerializeField]
+    private TooltipTrigger tooltipTrigger;
 
     private Image buttonImage;
     private Color buttonColor;
@@ -26,6 +28,7 @@ public class ActionButton : MonoBehaviour
     {
         attackButton.onClick.AddListener(OnActionButton);
         buttonImage = GetComponent<Image>();
+ 
     }
 
     private void OnEnable()
@@ -39,6 +42,7 @@ public class ActionButton : MonoBehaviour
     private void Start()
     {
         attackButton.interactable = false;
+    
     }
 
     private void OnActionButton()
@@ -46,6 +50,12 @@ public class ActionButton : MonoBehaviour
         Debug.Log("button pressed");
         PlayerAttack?.Invoke(skill);
         RemoveTarget?.Invoke();
+    }
+
+    private void SetTooltipText()
+    {
+        tooltipTrigger.Header = skill.TooltipHeader;
+        tooltipTrigger.Content = skill.TooltiContent;
     }
 
     private void SetTarget(Character target)
@@ -64,6 +74,8 @@ public class ActionButton : MonoBehaviour
     {
         skill = skillScriptableObject;
         buttonText.text = skill.SkillName;
+        buttonImage.sprite = skill.SkillIcon;
+        SetTooltipText();
     }
 
     private void BasedOnCombatState(CombatState combatState)
