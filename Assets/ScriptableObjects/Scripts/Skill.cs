@@ -11,5 +11,9 @@ public class Skill : ScriptableObject
     public Button SkillButton;
     public string SkillName = "";
     public Projecetile SkillObject;
-    public Color ButtonColor;
+    public Sprite SkillIcon;
+
+    [Tooltip("Tooltip text")]
+    public string TooltipHeader;
+    public string TooltiContent;
 }

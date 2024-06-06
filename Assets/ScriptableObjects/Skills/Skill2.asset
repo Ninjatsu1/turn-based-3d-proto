@@ -16,4 +16,4 @@ MonoBehaviour:
   SkillButton: {fileID: 3302593779575672470, guid: 19df71dba0c0b144b804e0eea63ca1f4, type: 3}
   SkillName: Epic skill
   SkillObject: {fileID: 1641683800966760903, guid: 1eb45057728d54c45a82fe6f56384498, type: 3}
-  ButtonColor: {r: 0.734247, g: 0.9433962, b: 0.9016173, a: 0}
+  SkillIcon: {fileID: 21300000, guid: d9c8f60d9df427044889b8cd68681047, type: 3}

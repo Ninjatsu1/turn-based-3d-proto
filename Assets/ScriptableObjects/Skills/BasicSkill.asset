@@ -16,4 +16,6 @@ MonoBehaviour:
   SkillButton: {fileID: 3302593779575672470, guid: 19df71dba0c0b144b804e0eea63ca1f4, type: 3}
   SkillName: Basic Skill
   SkillObject: {fileID: 1641683800966760903, guid: 1c115948c962e4646b3025d2c62339c7, type: 3}
-  ButtonColor: {r: 0.754717, g: 0.5304379, b: 0.5304379, a: 0}
+  SkillIcon: {fileID: 21300000, guid: fcdb3672b76474f4a831796b56998ffa, type: 3}
+  TooltipHeader: Basic Attack
+  TooltiContent: Dragon attacks their main target at melee distance.
