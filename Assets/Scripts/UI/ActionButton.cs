@@ -17,8 +17,6 @@ public class ActionButton : MonoBehaviour
     private TooltipTrigger tooltipTrigger;
 
     private Image buttonImage;
-    private Color buttonColor;
-    private event Action DisableButton;
 
     public static event Action<Skill> PlayerAttack;
     public static event Action RemoveTarget;
