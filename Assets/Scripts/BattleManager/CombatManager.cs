@@ -23,88 +23,88 @@ public class CombatManager : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerCombatActions.PlayerDidAction += PlayerDidAction;
-        EnemyCombatActions.EnemyDidAction += EnemyDidAction;
-        Character.CharacterEliminated += RemoveCharacterFromTurnOrder;
+        PlayerCombatActions.PlayerDidAction += OnPlayerDidAction;
+        EnemyCombatActions.EnemyDidAction += OnEnemyDidAction;
+        Character.CharacterEliminated += OnCharacterEliminated;
     }
-
 
     private void Start()
     {
-        GetCharacters();
-        SetTurnOrder();
-        CombatInitiation();
+        InitializeCombat();
     }
 
-    //Gets player and enemies
-    private void GetCharacters()
+    private void InitializeCombat()
     {
-        Character[] charactersArray;
-        charactersArray = FindObjectsOfType<Character>();
-        for (int i = 0; i < charactersArray.Length; i++)
-        {
-            turnOrder.Add(charactersArray[i].GetComponent<Character>());
-        }
+        PopulateTurnOrder();
+        SortTurnOrder();
+        StartCombat();
     }
 
-    private void SetTurnOrder()
+    private void PopulateTurnOrder()
+    {
+        turnOrder = FindObjectsOfType<Character>().ToList();
+    }
+
+    private void SortTurnOrder()
     {
         turnOrder = turnOrder.OrderByDescending(character => character.Speed).ToList();
     }
 
-    private void CombatInitiation()
+    private void StartCombat()
     {
         combatState = CombatState.Setup;
-        currentCharactersTurn = turnOrder[0];
-
-        CurrentCombatPhase?.Invoke(CombatState.Setup);
-        StartCoroutine(Combat());
+        currentCharactersTurn = turnOrder.FirstOrDefault();
+        CurrentCombatPhase?.Invoke(combatState);
+        StartCoroutine(CombatRoutine());
     }
 
-    private IEnumerator Combat()
+    private IEnumerator CombatRoutine()
     {
         while (!battleEnded)
         {
-            if (battleEnded)
+            foreach (var character in turnOrder)
             {
-                yield return null;
-            }
-            else
-            {
-                for (int i = 0; i < turnOrder.Count; i++)
+                currentCharactersTurn = character;
+                if (character.CharacterStats.IsPlayerCharacter)
                 {
-                    currentCharactersTurn = turnOrder[i];
-                    if (turnOrder[i].CharacterStats.IsPlayerCharacter)
-                    {
-                        enemyDidAction = false;
-                        StartCoroutine(PlayerTurn());
-                        yield return new WaitUntil(() => playerDidAction == true);
-                    }
-                    else
-                    {
-                        playerDidAction = false;
-                        StartCoroutine(EnemyTurn(currentCharactersTurn));
-                        yield return new WaitUntil(() => enemyDidAction == true);
-
-                    }
+                    enemyDidAction = false;
+                    yield return PlayerTurnRoutine();
+                }
+                else
+                {
+                    playerDidAction = false;
+                    yield return EnemyTurnRoutine(character);
                 }
             }
         }
         Debug.Log("Battle ended");
-        StopCoroutine(PlayerTurn());
-        StopCoroutine(EnemyTurn(null));
     }
 
-    private void RemoveCharacterFromTurnOrder(Character characterToRemove)
+    private IEnumerator PlayerTurnRoutine()
     {
-        if(characterToRemove.IsPlayerCharacter)
-        {
-            CheckPlayersAtRemoval(characterToRemove);
-        }
-        turnOrder.Remove(characterToRemove);
-        if(turnOrder.Count == 1)
+        combatState = CombatState.PlayerTurn;
+        CurrentCombatPhase?.Invoke(combatState);
+        yield return new WaitUntil(() => playerDidAction);
+    }
+
+    private IEnumerator EnemyTurnRoutine(Character enemyCharacter)
+    {
+        combatState = CombatState.EnemyTurn;
+        CurrentCombatPhase?.Invoke(combatState);
+        EnemyAction?.Invoke(enemyCharacter);
+        yield return new WaitUntil(() => enemyDidAction);
+    }
+
+    private void OnCharacterEliminated(Character eliminatedCharacter)
+    {
+        turnOrder.Remove(eliminatedCharacter);
+        if (turnOrder.Count == 1)
         {
             PlayerWin();
+        }
+        else if (eliminatedCharacter.IsPlayerCharacter)
+        {
+            PlayerLose();
         }
     }
 
@@ -115,53 +115,27 @@ public class CombatManager : MonoBehaviour
         CurrentCombatPhase?.Invoke(combatState);
     }
 
-    private void CheckPlayersAtRemoval(Character characterToRemove)
+    private void PlayerLose()
     {
         battleEnded = true;
         combatState = CombatState.Lost;
         CurrentCombatPhase?.Invoke(combatState);
     }
 
-    private IEnumerator PlayerTurn()
-    {
-        StopCoroutine(EnemyTurn(null));
-        combatState = CombatState.PlayerTurn;
-        Debug.Log("Player turn");
-        CurrentCombatPhase?.Invoke(CombatState.PlayerTurn);
-        while (!playerDidAction)
-        {
-            yield return null;
-        }
-    }
-
-    private void PlayerDidAction(bool actionDone)
+    private void OnPlayerDidAction(bool actionDone)
     {
         playerDidAction = actionDone;
     }
 
-    private IEnumerator EnemyTurn(Character currentEnemy)
+    private void OnEnemyDidAction(bool actionDone)
     {
-        StopCoroutine(PlayerTurn());
-        combatState = CombatState.EnemyTurn;
-        EnemyAction?.Invoke(currentCharactersTurn);
-        CurrentCombatPhase?.Invoke(CombatState.EnemyTurn);
-        var enemy = currentEnemy.GetComponent<Character>();
-        Debug.Log("HEALTH: " + enemy.CurrentHealh);
-        while (!enemyDidAction)
-        {
-            yield return null;
-        }
-    }
-
-    private void EnemyDidAction(bool enemyFinishedAction)
-    {
-        enemyDidAction = enemyFinishedAction;
+        enemyDidAction = actionDone;
     }
 
     private void OnDisable()
     {
-        PlayerCombatActions.PlayerDidAction -= PlayerDidAction;
-        EnemyCombatActions.EnemyDidAction -= EnemyDidAction;
-        Character.CharacterEliminated -= RemoveCharacterFromTurnOrder;
+        PlayerCombatActions.PlayerDidAction -= OnPlayerDidAction;
+        EnemyCombatActions.EnemyDidAction -= OnEnemyDidAction;
+        Character.CharacterEliminated -= OnCharacterEliminated;
     }
 }
