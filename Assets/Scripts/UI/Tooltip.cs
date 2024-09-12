@@ -25,6 +25,8 @@ public class Tooltip : MonoBehaviour
     private void Update()
     {
         Vector2 position = Input.mousePosition;
+
+        //Debug.Log("Mouse position: " + position);
         float pivotX = position.x / Screen.width;
         float pivotY = position.y / Screen.height;
         rectTransform.pivot = new Vector2(pivotX, pivotY);
