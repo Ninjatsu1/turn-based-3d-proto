@@ -46,7 +46,7 @@ public class PlayerCombatActions : MonoBehaviour
 		}
         if(Input.GetMouseButtonDown(1))
         {
-            playerTargetObject = null;
+            //playerTargetObject = null;
             RemovePlayerTarget?.Invoke();
         }
 	}
@@ -55,11 +55,10 @@ public class PlayerCombatActions : MonoBehaviour
     {
         if(!character.IsPlayerCharacter)
         {
-           Character selectedTarget = playerTargetObject.GetComponent<Character>();
-            if(selectedTarget == character)
-            {
-                playerTargetObject = null;                
-            }
+          // Character selectedTarget = playerTargetObject.GetComponent<Character>();
+
+           playerTargetObject = null;                
+            
         }
     }
 

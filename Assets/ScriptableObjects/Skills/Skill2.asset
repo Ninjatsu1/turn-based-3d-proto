@@ -17,3 +17,5 @@ MonoBehaviour:
   SkillName: Epic skill
   SkillObject: {fileID: 1641683800966760903, guid: 1eb45057728d54c45a82fe6f56384498, type: 3}
   SkillIcon: {fileID: 21300000, guid: d9c8f60d9df427044889b8cd68681047, type: 3}
+  TooltipHeader: Special Attack
+  TooltiContent: Kaboom
