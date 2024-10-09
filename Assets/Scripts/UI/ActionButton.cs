@@ -17,9 +17,10 @@ public class ActionButton : MonoBehaviour
     private TooltipTrigger tooltipTrigger;
 
     private Image buttonImage;
+    private string skillButtonTag = "SkillButton";
 
     public static event Action<Skill> PlayerAttack;
-    public static event Action RemoveTarget;
+    public static event Action RemoveCurrentTargetTarget;
 
 
     private void Awake()
@@ -33,8 +34,8 @@ public class ActionButton : MonoBehaviour
     {
         CombatManager.CurrentCombatPhase += BasedOnCombatState;
         PlayerCombatActions.SetPlayerTarget += SetTarget;
-        PlayerCombatActions.RemovePlayerTarget += RemoveTarget;
-        RemoveTarget += RemoveTargetFromButtons;
+        PlayerCombatActions.RemovePlayerTarget += RemoveCurrentTargetTarget;
+        RemoveCurrentTargetTarget += RemoveCurrentTargetFromButtons;
     }
 
     private void Start()
@@ -47,7 +48,7 @@ public class ActionButton : MonoBehaviour
     {
         Debug.Log("button pressed");
         PlayerAttack?.Invoke(skill);
-        RemoveTarget?.Invoke();
+        RemoveCurrentTargetTarget?.Invoke();
     }
 
     private void SetTooltipText()
@@ -62,9 +63,18 @@ public class ActionButton : MonoBehaviour
         currentTarget = target.gameObject;
     }
 
-    private void RemoveTargetFromButtons()
+    private void RemoveCurrentTargetFromButtons()
     {
-        attackButton.interactable = false;
+        GameObject[] allButtons = GameObject.FindGameObjectsWithTag(skillButtonTag);
+        foreach (var buttonObj in allButtons)
+        {
+            Button button = buttonObj.GetComponent<Button>();
+            if (button != null)
+            {
+                button.interactable = false;
+            }
+        }
+
         currentTarget = null;
     }
 
@@ -106,8 +116,8 @@ public class ActionButton : MonoBehaviour
         attackButton.onClick.RemoveListener(OnActionButton);
         CombatManager.CurrentCombatPhase -= BasedOnCombatState;
         PlayerCombatActions.SetPlayerTarget -= SetTarget;
-        PlayerCombatActions.RemovePlayerTarget -= RemoveTarget;
-        RemoveTarget += RemoveTargetFromButtons;
+        PlayerCombatActions.RemovePlayerTarget -= RemoveCurrentTargetTarget;
+        RemoveCurrentTargetTarget += RemoveCurrentTargetFromButtons;
 
     }
 }
